@@ -1,5 +1,7 @@
 using System.Text;
 using DtfStickerShop.API.Data;
+using DtfStickerShop.API.Repositories;
+using DtfStickerShop.API.Repositories.Interfaces;
 using DtfStickerShop.API.Services;
 using DtfStickerShop.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,6 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 // ---- Database ----
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// ---- Repositories (DI) ----
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 // ---- Services (DI) ----
 builder.Services.AddScoped<IAuthService, AuthService>();
