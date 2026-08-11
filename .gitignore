@@ -1,0 +1,24 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# .NET build output
+bin/
+obj/
+
+# ASP.NET
+*.dll
+*.pdb
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+
+# Environment files
+.env
+.env.local
+
+# Logs
+*.log
