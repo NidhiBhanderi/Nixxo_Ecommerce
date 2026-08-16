@@ -6,16 +6,18 @@ export default function ProductCard({ product }) {
 
   return (
     <Link href={`/products/${product.slug}`} className="product-card">
-      <img src={primaryImage} alt={product.name} />
-      <strong>{product.name}</strong>
-      <span>
+      <img className="product-image" src={primaryImage} alt={product.name} />
+      <div className="product-details">
+        <strong className="product-name">{product.name}</strong>
+        <span className="price">
         {product.discountPrice && (
-          <span style={{ textDecoration: "line-through", color: "#999", marginRight: 6 }}>
+          <span className="old-price">
             ${product.price.toFixed(2)}
           </span>
         )}
         ${price.toFixed(2)}
-      </span>
+        </span>
+      </div>
     </Link>
   );
 }

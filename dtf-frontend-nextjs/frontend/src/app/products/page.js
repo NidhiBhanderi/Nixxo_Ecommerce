@@ -25,7 +25,7 @@ export default function ProductsPage() {
     <div className="container">
       <h1>Shop All Stickers</h1>
 
-      <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", margin: "1rem 0" }}>
+      <div className="toolbar">
         <input
           placeholder="Search stickers..."
           value={search}
@@ -55,10 +55,10 @@ export default function ProductsPage() {
             ))}
           </div>
 
-          <div style={{ display: "flex", gap: "0.5rem", marginTop: "1.5rem" }}>
-            <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>Previous</button>
+          <div className="pagination">
+            <button className="button" disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>Previous</button>
             <span>Page {page} of {totalPages || 1}</span>
-            <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Next</button>
+            <button className="button" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>Next</button>
           </div>
         </>
       )}

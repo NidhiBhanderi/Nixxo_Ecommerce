@@ -11,7 +11,7 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link href="/" style={{ fontWeight: 700 }}>DTF Sticker Shop</Link>
+      <Link href="/" className="brand">DTF <span>Sticker Shop</span></Link>
       <div className="navbar-links">
         <Link href="/products">Shop</Link>
         {user ? (

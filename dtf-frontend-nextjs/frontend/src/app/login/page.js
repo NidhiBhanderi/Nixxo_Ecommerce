@@ -19,22 +19,21 @@ export default function LoginPage() {
       const result = await login({ email, password }).unwrap();
       dispatch(setCredentials(result));
       router.push("/");
-    } catch {
-      // error is already surfaced via the `error` state below
-    }
+    } catch { /* error is shown below */ }
   };
 
   return (
-    <div className="container">
-      <h1>Login</h1>
-      <form className="form" onSubmit={handleSubmit}>
-        <input type="email" placeholder="Email" value={email} required
-          onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" value={password} required
-          onChange={(e) => setPassword(e.target.value)} />
-        {error && <span className="error-text">{error.data?.message ?? "Login failed."}</span>}
-        <button type="submit" disabled={isLoading}>{isLoading ? "Logging in..." : "Login"}</button>
-      </form>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Login</h1>
+        <p className="auth-intro">Welcome back. Sign in to continue shopping.</p>
+        <form className="form" onSubmit={handleSubmit}>
+          <div className="field"><label htmlFor="login-email">Email address</label><input id="login-email" type="email" placeholder="you@example.com" value={email} required onChange={(e) => setEmail(e.target.value)} /></div>
+          <div className="field"><label htmlFor="login-password">Password</label><input id="login-password" type="password" placeholder="Enter your password" value={password} required onChange={(e) => setPassword(e.target.value)} /></div>
+          {error && <span className="error-text">{error.data?.message ?? "Login failed."}</span>}
+          <button type="submit" disabled={isLoading}>{isLoading ? "Logging in..." : "Login"}</button>
+        </form>
+      </div>
     </div>
   );
 }
