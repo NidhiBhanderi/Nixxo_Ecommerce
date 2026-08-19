@@ -14,7 +14,7 @@ export default function HomePage() {
       </section>
       <h2 className="section-title">Featured Products</h2>
       {isLoading && <p>Loading products...</p>}
-      {isError && <p className="error-text">Couldn't load products right now.</p>}
+      {isError && <p className="error-text">Products could not be loaded. Start the backend API, then refresh this page.</p>}
       {data && <div className="product-grid">{data.items.map((p) => <ProductCard key={p.productId} product={p} />)}</div>}
     </div>
   );

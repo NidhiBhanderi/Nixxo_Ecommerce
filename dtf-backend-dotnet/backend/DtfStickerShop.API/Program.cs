@@ -80,7 +80,13 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendPolicy", policy =>
-        policy.WithOrigins(allowedOrigins)
+        policy.SetIsOriginAllowed(origin =>
+        {
+            if (allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase)) return true;
+            if (!builder.Environment.IsDevelopment()) return false;
+            return Uri.TryCreate(origin, UriKind.Absolute, out var uri) &&
+                   (uri.Host.Equals("localhost", StringComparison.OrdinalIgnoreCase) || uri.Host == "127.0.0.1");
+        })
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials());

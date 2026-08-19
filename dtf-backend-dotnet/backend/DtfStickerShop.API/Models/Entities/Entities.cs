@@ -18,6 +18,8 @@ public class User
     public Role? Role { get; set; }
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public string? PasswordResetTokenHash { get; set; }
+    public DateTime? PasswordResetTokenExpiresAt { get; set; }
 
     public ICollection<Address> Addresses { get; set; } = new List<Address>();
     public Cart? Cart { get; set; }

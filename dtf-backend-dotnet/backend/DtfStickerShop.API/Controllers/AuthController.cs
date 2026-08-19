@@ -38,4 +38,20 @@ public class AuthController : ControllerBase
             return Unauthorized(new { message = ex.Message });
         }
     }
+
+    [HttpPost("forgot-password")]
+    public async Task<ActionResult<ForgotPasswordResponseDto>> ForgotPassword(ForgotPasswordDto dto) =>
+        Ok(await _authService.RequestPasswordResetAsync(dto));
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
+    {
+        try
+        {
+            await _authService.ResetPasswordAsync(dto);
+            return Ok(new { message = "Your password has been reset. You can now log in." });
+        }
+        catch (InvalidOperationException ex) { return BadRequest(new { message = ex.Message }); }
+        catch (UnauthorizedAccessException ex) { return BadRequest(new { message = ex.Message }); }
+    }
 }

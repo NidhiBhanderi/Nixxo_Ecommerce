@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using DtfStickerShop.API.Data;
 using DtfStickerShop.API.Models.DTOs;
@@ -55,6 +56,42 @@ public class AuthService : IAuthService
 
         return await BuildAuthResponse(user);
     }
+
+    public async Task<ForgotPasswordResponseDto> RequestPasswordResetAsync(ForgotPasswordDto dto)
+    {
+        const string message = "If an account exists for that email, a password-reset link has been created.";
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == dto.Email.Trim() && u.IsActive);
+        if (user is null) return new ForgotPasswordResponseDto(message);
+
+        var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+        user.PasswordResetTokenHash = HashResetToken(token);
+        user.PasswordResetTokenExpiresAt = DateTime.UtcNow.AddMinutes(30);
+        await _db.SaveChangesAsync();
+
+        var frontendUrl = (_config["FrontendUrl"] ?? "http://localhost:3000").TrimEnd('/');
+        var resetUrl = frontendUrl + "/reset-password?token=" + token;
+        return new ForgotPasswordResponseDto(message,
+            _config["ASPNETCORE_ENVIRONMENT"] == "Development" ? resetUrl : null);
+    }
+
+    public async Task ResetPasswordAsync(ResetPasswordDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Token) || string.IsNullOrWhiteSpace(dto.NewPassword) || dto.NewPassword.Length < 8)
+            throw new InvalidOperationException("Use a reset link and a password of at least 8 characters.");
+
+        var tokenHash = HashResetToken(dto.Token);
+        var user = await _db.Users.FirstOrDefaultAsync(u =>
+            u.PasswordResetTokenHash == tokenHash && u.PasswordResetTokenExpiresAt > DateTime.UtcNow);
+        if (user is null) throw new UnauthorizedAccessException("This password-reset link is invalid or has expired.");
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+        user.PasswordResetTokenHash = null;
+        user.PasswordResetTokenExpiresAt = null;
+        await _db.SaveChangesAsync();
+    }
+
+    private static string HashResetToken(string token) =>
+        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
 
     private async Task<AuthResponseDto> BuildAuthResponse(User user)
     {

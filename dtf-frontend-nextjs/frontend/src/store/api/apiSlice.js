@@ -2,7 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { logout } from "../slices/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://localhost:44386/api/",
+  // IIS Express runs this project on 44386. Override for Kestrel or production
+  // with NEXT_PUBLIC_API_BASE_URL (for example https://localhost:5001/api/).
+  baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "https://localhost:44386/api/",
+  // Avoid leaving the storefront in a permanent loading state when the API is offline.
+  timeout: 8000,
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
     if (token) headers.set("Authorization", `Bearer ${token}`);

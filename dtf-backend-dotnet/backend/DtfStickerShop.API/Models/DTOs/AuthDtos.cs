@@ -2,6 +2,9 @@ namespace DtfStickerShop.API.Models.DTOs;
 
 public record RegisterDto(string FullName, string Email, string Password, string? PhoneNumber);
 public record LoginDto(string Email, string Password);
+public record ForgotPasswordDto(string Email);
+public record ResetPasswordDto(string Token, string NewPassword);
+public record ForgotPasswordResponseDto(string Message, string? ResetUrl = null);
 
 public record AuthResponseDto(int UserId, string FullName, string Email, string Role, string Token, DateTime ExpiresAt);
 
