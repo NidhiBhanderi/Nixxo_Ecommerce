@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useResetPasswordMutation } from "@/store/api/authApi";
+import PasswordField from "@/components/PasswordField";
 
 export default function ResetPasswordPage() {
   const [token, setToken] = useState("");
@@ -21,8 +22,8 @@ export default function ResetPasswordPage() {
   };
   return <div className="auth-page"><div className="auth-card">
     <h1>Choose a new password</h1><form className="form" onSubmit={submit}>
-      <div className="field"><label htmlFor="password">New password</label><input id="password" type="password" minLength="8" value={password} required onChange={(e) => setPassword(e.target.value)} /></div>
-      <div className="field"><label htmlFor="confirm-password">Confirm password</label><input id="confirm-password" type="password" minLength="8" value={confirmPassword} required onChange={(e) => setConfirmPassword(e.target.value)} /></div>
+      <PasswordField id="password" label="New password" value={password} minLength={8} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" />
+      <PasswordField id="confirm-password" label="Confirm password" value={confirmPassword} minLength={8} onChange={(e) => setConfirmPassword(e.target.value)} autoComplete="new-password" />
       {(validationError || error) && <span className="error-text">{validationError || error.data?.message || "Could not reset password."}</span>}
       {success ? <p>{success} <Link href="/login">Log in</Link></p> : <button type="submit" disabled={isLoading}>{isLoading ? "Resetting..." : "Reset password"}</button>}
     </form>

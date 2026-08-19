@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { useRegisterMutation } from "@/store/api/authApi";
 import { setCredentials } from "@/store/slices/authSlice";
+import PasswordField from "@/components/PasswordField";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({ fullName: "", email: "", password: "", phoneNumber: "" });
@@ -25,7 +26,7 @@ export default function RegisterPage() {
         <form className="form" onSubmit={handleSubmit}>
           <div className="field"><label htmlFor="full-name">Full name</label><input id="full-name" placeholder="Your full name" value={form.fullName} required onChange={update("fullName")} /></div>
           <div className="field"><label htmlFor="email">Email address</label><input id="email" type="email" placeholder="you@example.com" value={form.email} required onChange={update("email")} /></div>
-          <div className="field"><label htmlFor="password">Password</label><input id="password" type="password" placeholder="Create a password" value={form.password} required onChange={update("password")} /></div>
+          <PasswordField id="password" label="Password" placeholder="Create a password" value={form.password} onChange={update("password")} autoComplete="new-password" />
           <div className="field"><label htmlFor="phone">Phone number <em>(optional)</em></label><input id="phone" placeholder="Your phone number" value={form.phoneNumber} onChange={update("phoneNumber")} /></div>
           {error && <span className="error-text">{error.data?.message ?? "Registration failed."}</span>}
           <button type="submit" disabled={isLoading}>{isLoading ? "Creating account..." : "Create account"}</button>

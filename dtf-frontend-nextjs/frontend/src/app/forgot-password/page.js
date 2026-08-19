@@ -12,13 +12,14 @@ export default function ForgotPasswordPage() {
     event.preventDefault();
     try { setResult(await forgotPassword({ email }).unwrap()); } catch { /* shown below */ }
   };
+
   return <div className="auth-page"><div className="auth-card">
-    <h1>Forgot password</h1><p className="auth-intro">Enter your email and we’ll send you a reset link.</p>
+    <h1>Forgot password</h1><p className="auth-intro">Enter your email to generate a secure reset link.</p>
     <form className="form" onSubmit={submit}>
       <div className="field"><label htmlFor="email">Email address</label><input id="email" type="email" value={email} required onChange={(e) => setEmail(e.target.value)} /></div>
       {error && <span className="error-text">{error.data?.message ?? "Could not request a reset link."}</span>}
-      {result && <span>{result.message}{result.resetUrl && <> <Link href={result.resetUrl}>Open reset link</Link></>}</span>}
-      <button type="submit" disabled={isLoading}>{isLoading ? "Sending..." : "Send reset link"}</button>
+      {result && <div className="reset-result"><span>{result.message}</span>{result.resetUrl && <Link className="button" href={result.resetUrl}>Open reset link</Link>}</div>}
+      {!result && <button type="submit" disabled={isLoading}>{isLoading ? "Generating..." : "Generate reset link"}</button>}
     </form><p><Link href="/login">Back to login</Link></p>
   </div></div>;
 }
