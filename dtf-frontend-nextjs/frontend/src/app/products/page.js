@@ -47,7 +47,11 @@ export default function ProductsPage() {
       {isLoading && <p>Loading products…</p>}
       {isError && <p className="error-text">Products could not be loaded. Start the backend API, then refresh this page.</p>}
 
-      {data && (
+      {data?.items?.length === 0 && !isLoading && (
+        <p className="empty-state">No products found.</p>
+      )}
+
+      {data?.items?.length > 0 && (
         <>
           <div className="product-grid">
             {data.items.map((p) => (
