@@ -23,7 +23,7 @@ export default function Navbar() {
         {isHydrated && user ? (
           <>
             {isAdmin && <Link href="/admin">Admin</Link>}
-            <Link href="/profile">{user.fullName}</Link>
+            <Link href="/profile" className="user-link"><span className="user-avatar">{user.fullName?.charAt(0)?.toUpperCase()}</span><span className="user-name">{user.fullName}</span></Link>
             <button onClick={() => dispatch(logout())}>Logout</button>
           </>
         ) : !isHydrated ? null : (
